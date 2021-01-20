@@ -93,7 +93,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.2849388
+  m_Radius: 2.5
   m_Center: {x: 0.13404405, y: 0.17153019, z: 0.050696015}
 --- !u!114 &7091808141607103470
 MonoBehaviour:
@@ -110,14 +110,15 @@ MonoBehaviour:
   damageOnImpact: 0
   spawnAll: 0
   objectsToRespawnOnDestroyPrefs:
-  - {fileID: 3403131511044902423, guid: 8c18e831f1e72c94db69016e32330387, type: 3}
-  - {fileID: 2055255833047720988, guid: 3eb4a98cd6750cd4d9188fce51655b59, type: 3}
+  - {fileID: 5494001975505020339, guid: 4f5d4b9cfdf38ef448ae9bad84b96bd8, type: 3}
+  - {fileID: 2245366933847142617, guid: 2dd605fff34693847ada7cee2a30d001, type: 3}
   spawnDistribution:
   - 0.2
   - 0.4
   spawnableObjetsType: 1
   lifeTime: 8
   movmentSpeed: 3
+  _randomMovingDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &-7660172040751100585
 Rigidbody:
   m_ObjectHideFlags: 0

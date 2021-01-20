@@ -15,7 +15,7 @@ public class AstroidLogic : MonoBehaviour, Spawnable
     [SerializeField] public int spawnableObjetsType;
     [SerializeField] float lifeTime = 8f;
     [SerializeField] float movmentSpeed = 0f;
-    Vector3 _randomMovingDirection = Vector3.zero;
+    public Vector3 _randomMovingDirection = Vector3.zero;
     private float _spawnTime = 0;
     
 
@@ -30,40 +30,55 @@ public class AstroidLogic : MonoBehaviour, Spawnable
     {
         if (Time.time - _spawnTime > lifeTime)
         {
-            Destroy();
+            Destroy(true);
         }
         transform.position = transform.position + (_randomMovingDirection * Time.deltaTime);
+    }
+
+    public GameObject Duplicate()
+    {
+        GameObject dup = SpawnsPoolManager.instance.SpawnableObject(gameObject);
+        dup.GetComponent<AstroidLogic>()._randomMovingDirection = _randomMovingDirection;
+
+        return dup;
     }
 
     public GameObject Init()
     {
         _spawnTime = Time.time;
         // creating a random vector with magnitude correlated to the speed
-        _randomMovingDirection = new Vector3(Random.Range(0, 1f), Random.Range(0, 1f), 0).normalized * Mathf.Sqrt(movmentSpeed);
+        if (_randomMovingDirection == Vector3.zero)
+        {
+            _randomMovingDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0).normalized * Mathf.Sqrt(movmentSpeed);
+        }
         return gameObject;
     }
 
-    public void Destroy()
+    public void Destroy(bool isDestroyedByBoundry)
     {
         onDestroy();
-        if (spawnAll)
+        if (!isDestroyedByBoundry && WorldBoundsArea.instance.IsInWordBounrds(transform.position))
         {
-            foreach (GameObject gameObjectToInit in objectsToRespawnOnDestroyPrefs)
+            if (spawnAll)
             {
-                GameObject spawnedObj = SpawnsPoolManager.instance.SpawnableObject(gameObjectToInit);
-                spawnedObj.transform.position = transform.position;
+                foreach (GameObject gameObjectToInit in objectsToRespawnOnDestroyPrefs)
+                {
+                    GameObject spawnedObj = SpawnsPoolManager.instance.SpawnableObject(gameObjectToInit);
+                    spawnedObj.transform.position = transform.position;
+                }
+            }
+            else
+            {
+                GameObject spawnedObj = null;
+                int indexToSpawn = CalcTool.GetNumberAccordingToDistribution(spawnDistribution);
+                if (indexToSpawn != -1)
+                {
+                    spawnedObj = SpawnsPoolManager.instance.SpawnableObject(objectsToRespawnOnDestroyPrefs[indexToSpawn]);
+                    spawnedObj.transform.position = transform.position;
+                }
             }
         }
-        else
-        {
-            GameObject spawnedObj = null;
-            int indexToSpawn = CalcTool.GetNumberAccordingToDistribution(spawnDistribution);
-            if (indexToSpawn != -1)
-            {
-                spawnedObj = SpawnsPoolManager.instance.SpawnableObject(objectsToRespawnOnDestroyPrefs[indexToSpawn]);
-                spawnedObj.transform.position = transform.position;
-            }
-        }
+
         SpawnsPoolManager.instance.AddUnactivateObject(this);
         gameObject.SetActive(false);
     }
@@ -73,7 +88,7 @@ public class AstroidLogic : MonoBehaviour, Spawnable
         if(collision.gameObject.tag == "Spaceship")
         {
             collision.gameObject.GetComponent<HealthLogic>().GettingHit(damageOnImpact);
-            Destroy();
+            Destroy(false);
         }
     }
 

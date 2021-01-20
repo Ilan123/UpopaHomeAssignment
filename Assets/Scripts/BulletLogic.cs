@@ -9,9 +9,13 @@ public class BulletLogic : MonoBehaviour, Spawnable
     private float _spawnTime = 0;
 
     public int GetSpawnableObjetsType() => spawnableObjetsType;
+    public void SetSpawnTime(float time) => _spawnTime = time;
     void Start()
     {
-        _spawnTime = Time.time;
+        if(_spawnTime == 0)
+        {
+            _spawnTime = Time.time;
+        }
     }
 
     // Update is called once per frame
@@ -19,8 +23,20 @@ public class BulletLogic : MonoBehaviour, Spawnable
     {
         if(Time.time - _spawnTime > lifeTime)
         {
-            Destroy();
+            Destroy(true);
         }
+    }
+
+    public GameObject Duplicate()
+    {
+        GameObject dup = SpawnsPoolManager.instance.SpawnableObject(gameObject);
+        
+        dup.GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity;
+        dup.transform.position = transform.position;
+        dup.transform.rotation = transform.rotation;
+        dup.GetComponent<BulletLogic>().SetSpawnTime(_spawnTime);
+
+        return dup;
     }
 
     public GameObject Init() {
@@ -28,7 +44,7 @@ public class BulletLogic : MonoBehaviour, Spawnable
         return gameObject;
     }
 
-    public void Destroy()
+    public void Destroy(bool isDestroyedByBoundry)
     {
         SpawnsPoolManager.instance.AddUnactivateObject(this);
         gameObject.SetActive(false);
@@ -36,10 +52,10 @@ public class BulletLogic : MonoBehaviour, Spawnable
 
     private void OnTriggerEnter(Collider other)
     {
-
-        if (1 << other.gameObject.layer == LayerMask.GetMask("Destroyable"))
+        if (1 << other.gameObject.layer == LayerMask.GetMask("Destroyable") && other.tag != "Spaceship")
         {
-            other.GetComponent<Spawnable>().Destroy();
+            other.GetComponent<Spawnable>().Destroy(false);
+            Destroy(false);
         }
     }
 }

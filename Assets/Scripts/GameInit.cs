@@ -19,6 +19,7 @@ public class GameInit : MonoBehaviour
     {
         GameManager.instance.onHealthChange += UIManager.instance.UpdateHealth;
         GameManager.instance.onScoreChange += UIManager.instance.UpdateScore;
+        GameManager.instance.onZeroHealth += UIManager.instance.ShowEndGameScreen;
     }
 
 }

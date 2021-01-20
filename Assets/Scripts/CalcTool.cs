@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class CalcTool
 {
+    static float screenWidth = 0;
+    static float screenHeight = 0;
+
     public static int GetNumberAccordingToDistribution(float[] distribution)
     {
         float randNum = Random.Range(0, 1f);
@@ -27,11 +30,17 @@ public static class CalcTool
     /// <returns>return tuple: (screenWidth, screenHeight)</returns>
     public static (float, float) GetScreenSize()
     {
-        Vector3 cameraPos = Camera.main.transform.position;
-        float frustumHeight = 2f * Camera.main.orthographicSize;
-        float frustumWidth = frustumHeight * Camera.main.aspect;
+        if (screenWidth == 0 || screenHeight == 0)
+        {
+            Vector3 cameraPos = Camera.main.transform.position;
+            float frustumHeight = 2f * Camera.main.orthographicSize;
+            float frustumWidth = frustumHeight * Camera.main.aspect;
 
-        return (frustumWidth, frustumHeight);
+            screenWidth = frustumWidth;
+            screenHeight = frustumHeight;
+        }
+
+        return (screenWidth, screenHeight);
     }
 
 }

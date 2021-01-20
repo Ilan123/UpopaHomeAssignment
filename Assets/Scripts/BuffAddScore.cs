@@ -18,12 +18,19 @@ public class BuffAddScore : MonoBehaviour, Spawnable
         return gameObject;
     }
 
-    public void Destroy()
+    public GameObject Duplicate()
+    {
+        GameObject dup = SpawnsPoolManager.instance.SpawnableObject(gameObject);
+
+        return dup;
+    }
+
+    public void Destroy(bool isDestroyedByBoundry)
     {
         SpawnsPoolManager.instance.AddUnactivateObject(this);
         gameObject.SetActive(false);
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Triggered HotDog");
@@ -32,7 +39,15 @@ public class BuffAddScore : MonoBehaviour, Spawnable
             Debug.Log("Triggered HotDog - 2");
             onAddingScore();
             GameManager.instance.AddScore(amount);
-            Destroy();
+            Destroy(false);
         }
+    }
+    */
+    public void OnMouseDown()
+    {
+        Debug.Log("Triggered HotDog - 2");
+        onAddingScore();
+        GameManager.instance.AddScore(amount);
+        Destroy(false);
     }
 }

@@ -13,17 +13,24 @@ public class BuffAddHealth : MonoBehaviour, Spawnable
         GameManager.instance.AddHealth(amount);
     }
 
+    public GameObject Duplicate()
+    {
+        GameObject dup = SpawnsPoolManager.instance.SpawnableObject(gameObject);
+
+        return dup;
+    }
+
     public GameObject Init()
     {
         return gameObject;
     }
 
-    public void Destroy()
+    public void Destroy(bool isDestroyedByBoundry)
     {
         SpawnsPoolManager.instance.AddUnactivateObject(this);
         gameObject.SetActive(false);
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
 
@@ -31,7 +38,14 @@ public class BuffAddHealth : MonoBehaviour, Spawnable
         {
             onAddingHealth();
             GameManager.instance.AddHealth(amount);
-            Destroy();
+            Destroy(false);
         }
+    }
+    */
+    public void OnMouseDown()
+    {
+        onAddingHealth();
+        GameManager.instance.AddHealth(amount);
+        Destroy(false);
     }
 }

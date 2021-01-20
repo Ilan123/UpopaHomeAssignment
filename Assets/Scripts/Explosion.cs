@@ -20,6 +20,10 @@ public class Explosion : MonoBehaviour, Spawnable
     {
         Explotion();
     }
+    public GameObject Duplicate()
+    {
+        return Instantiate(gameObject, transform.position, transform.rotation); ;
+    }
     private void Explotion()
     {
 
@@ -43,16 +47,16 @@ public class Explosion : MonoBehaviour, Spawnable
             }
             else if (obj.tag == "Spawnable")
             {
-                obj.GetComponent<Spawnable>().Destroy();
+                obj.GetComponent<Spawnable>().Destroy(false);
             }
         }
-        Destroy();
+        Destroy(false);
     }
     public GameObject Init()
     {
         return gameObject;
     }
-    public void Destroy()
+    public void Destroy(bool isDestroyedByBoundry)
     {
         SpawnsPoolManager.instance.AddUnactivateObject(this);
         gameObject.SetActive(false);

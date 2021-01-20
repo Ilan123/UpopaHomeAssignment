@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     [SerializeField] Text textScore = null;
     [SerializeField] Slider sliderHealth = null;
+    [SerializeField] GameObject panelMainMenu = null;
 
     private void Awake()
     {
@@ -27,5 +28,20 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("UpdateHealth");
         sliderHealth.value = currentHealth / maxHealth;
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+    
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ShowEndGameScreen()
+    {
+        panelMainMenu.SetActive(true);
     }
 }
