@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float healthLostAcceleration = 5f;
     private float _prevHealthLostTime;
     private int _score = 0;
-    float currenthealth;
+    private float currenthealth;
     
 
     private void Awake()
@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        GameObject.Find("Spaceship").GetComponent<HealthLogic>().onGettingHitted += LoseHealth;
         _prevHealthLostTime = Time.time;
         Time.timeScale = 1;
     }
@@ -45,7 +44,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void LoseHealth(float damage)
+    public void LoseHealth(float damage)
     {
         currenthealth -= damage;
         onHealthChange(currenthealth, maxHealth);

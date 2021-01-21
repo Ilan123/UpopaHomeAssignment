@@ -1,0 +1,17 @@
+{
+    "name": "GameInits",
+    "references": [
+        "GUID:f2a39058e54769b40bf187c37b608b08",
+        "GUID:1d7d6599ab269dd49857a4b7aeaea721",
+        "GUID:3f00332c824c4aa4cbffeaf86f3ef42e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

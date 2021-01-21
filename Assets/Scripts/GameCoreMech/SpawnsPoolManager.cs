@@ -6,6 +6,8 @@ using UnityEngine;
 public class SpawnsPoolManager : MonoBehaviour
 {
     public static SpawnsPoolManager instance;
+    // The object that we want to manage with the pool, auto assign type id to each object prefab.
+    [SerializeField] GameObject[] spawnablePrefabs = null;
     // this array of lists of the spawnable gameobjects 
     private Dictionary<int, List<Spawnable>> _unactivedSpawnableObjects; // pool
 
@@ -24,6 +26,11 @@ public class SpawnsPoolManager : MonoBehaviour
     private void Start()
     {
         InitSpawnableList();
+        for (int i = 0; i < spawnablePrefabs.Length; i++)
+        {
+            spawnablePrefabs[i].GetComponent<Spawnable>().SetSpawnableObjectType(i);
+            _unactivedSpawnableObjects.Add(i, new List<Spawnable>());
+        }
     }
 
     /// <summary>
@@ -69,11 +76,14 @@ public class SpawnsPoolManager : MonoBehaviour
     public void AddUnactivateObject(Spawnable spawnableObject)
     {
         int typeIndex = spawnableObject.GetSpawnableObjetsType();
-        if (!_unactivedSpawnableObjects.ContainsKey(typeIndex))
+        if (_unactivedSpawnableObjects.ContainsKey(typeIndex))
         {
-            _unactivedSpawnableObjects.Add(typeIndex, new List<Spawnable>());
+            _unactivedSpawnableObjects[typeIndex].Add(spawnableObject);
         }
-        _unactivedSpawnableObjects[typeIndex].Add(spawnableObject);
+        else
+        {
+            Debug.LogWarning("Tried to spawn a spawnable object, that its prefab werenn't added to the pref pool array, please add the prefab to the SpawnsPoolManager prefabs array");
+        }
     }
 
 }
